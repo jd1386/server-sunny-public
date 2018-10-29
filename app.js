@@ -8,7 +8,8 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
-app.use(cors())
+app.use(cors());
+app.use(logger('tiny'));
 
 app.use(logger('dev'));
 app.use(express.json());
