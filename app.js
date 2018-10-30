@@ -7,6 +7,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const articlesRouter = require('./routes/articles');
 const categoriesRouter = require('./routes/categories');
+const sequelize = require('./models').sequelize;
 
 const app = express();
 app.use(cors());
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+sequelize.sync();
 
 app.use('/', indexRouter);
 app.use('/articles', articlesRouter);
