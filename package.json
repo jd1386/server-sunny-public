@@ -2,7 +2,12 @@
   "name": "server-sunny",
   "version": "0.0.0",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "prod-start": "NODE_ENV=production node ./bin/www",
+    "create-db": "NODE_ENV=production node_modules/.bin/sequelize db:create",
+    "drop-db": "NODE_ENV=production node_modules/.bin/sequelize db:drop",
+    "seed-categories": "NODE_ENV=production node_modules/.bin/sequelize db:seed --seed categories.js",
+    "seed-articles": "NODE_ENV=production node_modules/.bin/sequelize db:seed --seed articles.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
