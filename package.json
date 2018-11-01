@@ -8,7 +8,7 @@
     "drop-db": "NODE_ENV=production node_modules/.bin/sequelize db:drop",
     "seed-categories": "NODE_ENV=production node_modules/.bin/sequelize db:seed --seed categories.js",
     "seed-articles": "NODE_ENV=production node_modules/.bin/sequelize db:seed --seed articles.js",
-    "fetch_articles": "node ./tasks/fetchAndSaveArticles.js"
+    "fetch_articles": "NODE_ENV=production node saveArticlesList.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
