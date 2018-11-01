@@ -6,8 +6,10 @@ const logger = require('morgan');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
-const articlesRouter = require('./routes/articles');
 const categoriesRouter = require('./routes/categories');
+const articlesRouter = require('./routes/articles');
+const playRouter = require('./routes/play');
+
 const sequelize = require('./models').sequelize;
 
 const app = express();
@@ -20,7 +22,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 sequelize.sync();
 
 app.use('/', indexRouter);
-app.use('/articles', articlesRouter);
 app.use('/categories', categoriesRouter);
+app.use('/articles', articlesRouter);
+app.use('/play', playRouter);
 
 module.exports = app;
