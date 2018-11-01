@@ -22,7 +22,7 @@ router.get('/', async (req, res, next) => {
       order: [
         ['rank', 'asc']
       ],
-      attributes: ['id', 'title', 'publisher', 'image_url', 'file_url', 'rank']
+      attributes: ['id', 'title', 'publisher', 'image_url', 'rank']
     });
     res.json(articles);
   } else {
@@ -38,7 +38,7 @@ router.get('/', async (req, res, next) => {
       order: [
         ['rank', 'asc']
       ],
-      attributes: ['id', 'title', 'publisher', 'image_url', 'file_url', 'rank']
+      attributes: ['id', 'title', 'publisher', 'image_url', 'rank']
     });
     res.json(articles);
   }
