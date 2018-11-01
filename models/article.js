@@ -7,8 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true
     },
     content: {
-      type: DataTypes.TEXT,
-      allowNull: false
+      type: DataTypes.TEXT
     },
     source_url: {
       type: DataTypes.STRING,
@@ -17,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     publisher: DataTypes.STRING,
     image_url: DataTypes.STRING,
     file_url: DataTypes.STRING,
+    rank: DataTypes.TINYINT,
     sid: DataTypes.STRING,
     oid: DataTypes.STRING,
     aid: DataTypes.STRING,
@@ -33,8 +33,5 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     timestamps: false
   });
-  Article.associate = function (models) {
-    // associations can be defined here
-  };
   return Article;
 };
