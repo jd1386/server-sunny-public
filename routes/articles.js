@@ -8,10 +8,9 @@ const Op = Sequelize.Op;
 router.get('/', async (req, res, next) => {
   try {
     let category = req.query.category_id;
-    var articles;
 
     if (category) {
-      articles = await Article.findAll({
+      let articles = await Article.findAll({
         where: {
           category_id: category,
           rank: {
@@ -25,8 +24,9 @@ router.get('/', async (req, res, next) => {
           ['rank', 'asc']
         ]
       });
+      res.json(articles);
     } else {
-      articles = await Article.findAll({
+      let articles = await Article.findAll({
         where: {
           rank: {
             [Op.not]: null
@@ -39,8 +39,8 @@ router.get('/', async (req, res, next) => {
           ['rank', 'asc']
         ]
       });
+      res.json(articles);
     }
-    res.json(articles);
   } catch (err) {
     next(err);
   }
