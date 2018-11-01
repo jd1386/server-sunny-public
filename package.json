@@ -7,17 +7,25 @@
     "create-db": "NODE_ENV=production node_modules/.bin/sequelize db:create",
     "drop-db": "NODE_ENV=production node_modules/.bin/sequelize db:drop",
     "seed-categories": "NODE_ENV=production node_modules/.bin/sequelize db:seed --seed categories.js",
-    "seed-articles": "NODE_ENV=production node_modules/.bin/sequelize db:seed --seed articles.js"
+    "seed-articles": "NODE_ENV=production node_modules/.bin/sequelize db:seed --seed articles.js",
+    "fetch_articles": "node ./tasks/fetchAndSaveArticles.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "cheerio": "^1.0.0-rc.2",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.4",
     "debug": "~2.6.9",
+    "dotenv": "^6.1.0",
     "express": "~4.16.0",
+    "iconv-lite": "^0.4.24",
     "morgan": "~1.9.0",
     "mysql2": "^1.6.1",
+    "query-string": "^6.2.0",
+    "request": "^2.88.0",
     "sequelize": "^4.41.0",
-    "sequelize-cli": "^5.2.0"
+    "sequelize-cli": "^5.2.0",
+    "underscore": "^1.9.1"
   },
   "devDependencies": {
     "eslint": "^5.8.0",

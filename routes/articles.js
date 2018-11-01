@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 var Article = require('../models').Article;
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 /* GET articles listing. */
 router.get('/', async (req, res, next) => {
@@ -11,11 +13,32 @@ router.get('/', async (req, res, next) => {
     if (category) {
       articles = await Article.findAll({
         where: {
-          category_id: category
-        }
+          category_id: category,
+          rank: {
+            [Op.not]: null
+          },
+          content: {
+            [Op.not]: null
+          }
+        },
+        order: [
+          ['rank', 'asc']
+        ]
       });
     } else {
-      articles = await Article.findAll();
+      articles = await Article.findAll({
+        where: {
+          rank: {
+            [Op.not]: null
+          },
+          content: {
+            [Op.not]: null
+          }
+        },
+        order: [
+          ['rank', 'asc']
+        ]
+      });
     }
     res.json(articles);
   } catch (err) {
