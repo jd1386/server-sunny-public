@@ -14,13 +14,13 @@ router.get('/', async (req, res, next) => {
     let articleFetched = await Scraper.getArticleContent(articleExisting.get('source_url'));
 
     if (articleFetched.content) {
-      console.log('ARTICLE CONTENT', articleFetched.content);
-      console.log('ARTICLE URL', articleFetched.url);
+      // console.log('ARTICLE CONTENT', articleFetched.content);
+      // console.log('ARTICLE URL', articleFetched.url);
 
       const apiUrl = 'https://naveropenapi.apigw.ntruss.com/voice/v1/tts';
       const options = {
         url: apiUrl,
-        form: { speaker: 'mijin', speed: '-1', text: articleFetched.content },
+        form: { speaker: 'mijin', speed: '-1', text: articleFetched.title },
         headers: { 'X-NCP-APIGW-API-KEY-ID': process.env.NAVER_CLOVA_ID, 'X-NCP-APIGW-API-KEY': process.env.NAVER_CLOVA_SECRET }
       };
       const writeStream = fs.createWriteStream(`./tmp/article_${articleExisting.get('id')}.mp3`);
