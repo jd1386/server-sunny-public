@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const request = require("request");
-var client_id = "9XzWtNwbe5402oEoGumn";
-var client_secret = "a7AWFb5Tpu";
+var client_id = process.env.NAVER_CLIENT_ID;
+var client_secret = process.env.NAVER_CLIENT_SECRET;
 
 router.get("/news", function(req, res) {
   var api_url =
