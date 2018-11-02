@@ -19,7 +19,7 @@ router.get('/', (req, res, next) => {
       order: [
         ['rank', 'asc']
       ],
-      attributes: ['id', 'title', 'image_url', 'rank', 'publisher', 'oid']
+      attributes: ['id', 'title', 'image_url', 'rank', 'publisher', 'createdAt']
     }).then(articles => {
       console.log(articles);
       res.json(articles);
@@ -36,7 +36,7 @@ router.get('/', (req, res, next) => {
       order: [
         ['rank', 'asc']
       ],
-      attributes: ['id', 'title', 'image_url', 'rank', 'publisher', 'oid']
+      attributes: ['id', 'title', 'image_url', 'rank', 'publisher', 'createdAt']
     }).then(articles => {
       res.json(articles);
     }).catch(err => {

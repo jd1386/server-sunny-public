@@ -13,8 +13,8 @@ const naverRootURL = 'https://m.news.naver.com';
 
 module.exports = async (categoryID) => {
   let categoryName;
-  console.log('categoryID', categoryID);
-  Category.findByPk(categoryID)
+
+  await Category.findByPk(categoryID)
     .then(returnedCategory => {
       if (returnedCategory) {
         categoryName = returnedCategory.get('name');
