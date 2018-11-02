@@ -24,5 +24,6 @@ app.use("/", indexRouter);
 app.use("/search", searchRouter);
 app.use("/articles", articlesRouter);
 app.use("/categories", categoriesRouter);
+app.use('/play', playRouter);
 
 module.exports = app;
