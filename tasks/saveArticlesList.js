@@ -1,7 +1,6 @@
 const _ = require('underscore');
 const Scraper = require('../scrapers');
 const Article = require('../models').Article;
-const Category = require('../models').Category;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 

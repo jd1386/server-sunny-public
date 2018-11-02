@@ -1,8 +1,8 @@
-const Article = require('../models').Article;
+// const Article = require('../models').Article;
 const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
+// const Op = Sequelize.Op;
 const mobileContent = require('./mobileContent');
-const webContent = require('./webContent');
+// const webContent = require('./webContent');
 
 module.exports = async (url) => {
   if (url.includes('//m.news.naver.com')) {
