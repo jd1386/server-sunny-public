@@ -5,42 +5,43 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 /* GET articles listing. */
-router.get('/', async (req, res, next) => {
+router.get('/', (req, res, next) => {
   let category = req.query.category_id;
 
   if (category) {
-    let articles = await Article.findAll({
+    Article.findAll({
       where: {
         category_id: category,
         rank: {
           [Op.not]: null
-        },
-        content: {
-          [Op.not]: null
         }
       },
       order: [
         ['rank', 'asc']
       ],
-      attributes: ['id', 'title', 'publisher', 'image_url', 'rank']
+      attributes: ['id', 'title', 'image_url', 'rank', 'publisher', 'oid']
+    }).then(articles => {
+      console.log(articles);
+      res.json(articles);
+    }).catch(err => {
+      throw err;
     });
-    res.json(articles);
   } else {
-    let articles = await Article.findAll({
+    Article.findAll({
       where: {
         rank: {
           [Op.not]: null
-        },
-        content: {
-          [Op.not]: null
         }
       },
       order: [
         ['rank', 'asc']
       ],
-      attributes: ['id', 'title', 'publisher', 'image_url', 'rank']
+      attributes: ['id', 'title', 'image_url', 'rank', 'publisher', 'oid']
+    }).then(articles => {
+      res.json(articles);
+    }).catch(err => {
+      throw err;
     });
-    res.json(articles);
   }
 });
 

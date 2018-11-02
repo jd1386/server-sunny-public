@@ -4,27 +4,15 @@ const Op = Sequelize.Op;
 const mobileContent = require('./mobileContent');
 const webContent = require('./webContent');
 
-module.exports = (url) => {
+module.exports = async (url) => {
   if (url.includes('//m.news.naver.com')) {
     // use mobile version scraper
-    mobileContent(url)
-      .then(articleContent => {
-        Article.findOne({
-          where: {
-            aid: articleContent.aid
-          }
-        })
-          .then(savedArticle => {
-            if (savedArticle && savedArticle.aid === articleContent.aid) {
-              savedArticle.update({
-                content: articleContent.content,
-                publisher: articleContent.publisher
-              });
-            }
-          })
-          .catch(err => { throw err; });
-      })
-      .catch(err => { throw err; });
+    try {
+      let articleContent = await mobileContent(url);
+      return articleContent;
+    } catch (err) {
+      console.log(err);
+    }
   } else if (url.includes('//news.naver.com')) {
     // use web version scraper
     // let articleObj = await webContent(url);
