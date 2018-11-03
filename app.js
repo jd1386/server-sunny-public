@@ -9,6 +9,7 @@ const articlesRouter = require('./routes/articles');
 const categoriesRouter = require('./routes/categories');
 const searchRouter = require('./routes/search');
 const playRouter = require('./routes/play');
+const testRouter = require('./routes/test');
 const sequelize = require('./models').sequelize;
 
 const app = express();
@@ -26,5 +27,6 @@ app.use('/search', searchRouter);
 app.use('/articles', articlesRouter);
 app.use('/categories', categoriesRouter);
 app.use('/play', playRouter);
+app.use('/test', testRouter);
 
 module.exports = app;
