@@ -61,7 +61,6 @@ const returnURLs = async (categoryID) => {
     urls = _.pluck(articles, 'source_url');
   }).catch(err => { throw err; });
 
-  console.log('urlssssss', urls);
   return urls;
 };
 
@@ -129,12 +128,8 @@ const saveArticlesList = (categoryID) => {
   });
 };
 
-const run = async (categoryID) => {
-  let urls = await saveArticlesList(categoryID);
-  await fetchArticleContent(urls);
-
-  // test
-  let test = await Article.findAndCountAll({
+const test = async (categoryID) => {
+  let articles = await Article.findAndCountAll({
     where: {
       category_id: categoryID,
       rank: {
@@ -145,9 +140,18 @@ const run = async (categoryID) => {
       }
     }
   }).catch(err => { throw err; });
+
   console.log('===================================');
-  console.log('COUNT:', test.count);
+  console.log('COUNT:', articles.count);
   console.log('===================================');
+};
+
+const run = async (categoryID) => {
+  let urls = await saveArticlesList(categoryID);
+  await fetchArticleContent(urls);
+
+  // test
+  await test(categoryID);
   // terminate the task
   process.exit(0);
 };
