@@ -149,7 +149,7 @@ const run = async (categoryID) => {
   // test
   await test(categoryID);
   // terminate the task
-  process.exit(0);
+  process.exit(1);
 };
 
 run(argv.c);
