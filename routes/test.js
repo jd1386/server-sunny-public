@@ -5,17 +5,19 @@ const Scraper = require('../scrapers');
 
 /* GET articles listing. */
 router.get('/', async (req, res, next) => {
-  // let scraper = new Scraper();
+  let scraper = new Scraper();
   // res.send(scraper.newsCategories()['politics']);
   // let results = await scraper.getArticleList(1);
   // let results = await Scraper.getArticleContent('https://m.news.naver.com/read.nhn?aid=0003673639&oid=421&sid1=100');
+  // let results = await scraper.getArticleContent('https://m.news.naver.com/read.nhn?aid=0003673639&oid=421&sid1=100');
+  let results = await scraper.getArticleContent('https://news.naver.com/main/read.nhn?oid=011&sid1=101&aid=0003434682&mid=shm&viewType=pc&mode=LSD&nh=20181103185441');
 
-  let results = await Article.findAll({
-    order: [
-      ['oid', 'asc']
-    ],
-    attributes: ['id', 'publisher', 'oid']
-  });
+  // let results = await Article.findAll({
+  //   order: [
+  //     ['oid', 'asc']
+  //   ],
+  //   attributes: ['id', 'publisher', 'oid']
+  // });
 
   res.send(results);
 });
