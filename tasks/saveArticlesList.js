@@ -9,7 +9,7 @@ const Op = Sequelize.Op;
 const scraper = new Scraper();
 
 const nullifyArticles = async (combinedAids, categoryID) => {
-  await Article.findAll({
+  let articlesToUpdate = await Article.findAll({
     where: {
       category_id: categoryID,
       aid: {
@@ -19,16 +19,11 @@ const nullifyArticles = async (combinedAids, categoryID) => {
         [Op.not]: null
       }
     }
-  })
-    .then(articlesToUpdate => {
-      // articlesToUpdate.forEach(article => {
-      //   article.update({ rank: null });
-      // });
-      for (let i = 0; i < articlesToUpdate.length; i++) {
-        articlesToUpdate[i].update({ rank: null });
-      }
-    })
-    .catch(err => { throw err; });
+  });
+
+  for (let i = 0; i < articlesToUpdate.length; i++) {
+    await articlesToUpdate[i].update({ rank: null });
+  }
 };
 
 const updateOrCreateArticle = async (targetArticle) => {
@@ -99,6 +94,7 @@ const updateArticles = async (articlesList, categoryID) => {
 };
 
 const fetchArticleContent = async (urls) => {
+  console.log('urlsssssssss count', urls.length);
   for (let i = 0; i < urls.length; i++) {
     await scraper.getArticleContent(urls[i])
       .then(articleContent => {
@@ -139,7 +135,7 @@ const test = async (categoryID) => {
         [Op.not]: null
       }
     }
-  }).catch(err => { throw err; });
+  });
 
   console.log('===================================');
   console.log('COUNT:', articles.count);
