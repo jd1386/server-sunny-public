@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const request = require('request');
+require('dotenv').config();
 var clientId = process.env.NAVER_CLIENT_ID;
 var clientSecret = process.env.NAVER_CLIENT_SECRET;
 
@@ -12,7 +13,7 @@ router.get('/news', function (req, res) {
     method: 'GET',
     url: apiUrl,
     headers: {
-      'Content-Type': 'text/html; charset=utf-8',
+      'Content-Type': 'text/json; charset=utf-8',
       'cache-control': 'no-cache',
       'X-Naver-Client-Id': clientId,
       'X-Naver-Client-Secret': clientSecret
