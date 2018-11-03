@@ -7,6 +7,10 @@
 var app = require('../app');
 var debug = require('debug')('server-sunny:server');
 var http = require('http');
+// cron jobs
+// const cron = require('node-cron');
+// const shell = require('shelljs');
+//
 
 /**
  * Get port from environment and store in Express.
@@ -21,6 +25,22 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+/*
+  Cron jobs
+*/
+// Todo: add dynamic category id
+
+// cron.schedule('* * * * *', () => {
+//   console.log('running a cron task');
+//   if (shell.exec(`NODE_ENV=${app.settings.env} node tasks/saveArticlesList.js --c=1`).code === 0) {
+//     // error occurred
+//     shell.exit(1);
+//     shell.echo('error occurred when running cron task');
+//   } else {
+//     shell.echo('cron task successfully run');
+//   }
+// });
+
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -33,7 +53,7 @@ server.on('listening', onListening);
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
+function normalizePort (val) {
   var port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -53,7 +73,7 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+function onError (error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -64,16 +84,16 @@ function onError(error) {
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
+  case 'EACCES':
+    console.error(bind + ' requires elevated privileges');
+    process.exit(1);
+    break;
+  case 'EADDRINUSE':
+    console.error(bind + ' is already in use');
+    process.exit(1);
+    break;
+  default:
+    throw error;
   }
 }
 
@@ -81,7 +101,7 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
+function onListening () {
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
