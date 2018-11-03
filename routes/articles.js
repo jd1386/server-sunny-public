@@ -3,6 +3,7 @@ const router = express.Router();
 var Article = require('../models').Article;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const commonAttributes = ['id', 'title', 'image_url', 'rank', 'publisher', 'createdAt'];
 
 /* GET articles listing. */
 router.get('/', (req, res, next) => {
@@ -19,9 +20,8 @@ router.get('/', (req, res, next) => {
       order: [
         ['rank', 'asc']
       ],
-      attributes: ['id', 'title', 'image_url', 'rank', 'publisher', 'createdAt']
+      attributes: commonAttributes
     }).then(articles => {
-      console.log(articles);
       res.json(articles);
     }).catch(err => {
       throw err;
@@ -36,13 +36,33 @@ router.get('/', (req, res, next) => {
       order: [
         ['rank', 'asc']
       ],
-      attributes: ['id', 'title', 'image_url', 'rank', 'publisher', 'createdAt']
+      attributes: commonAttributes
     }).then(articles => {
       res.json(articles);
     }).catch(err => {
       throw err;
     });
   }
+});
+
+router.get('/featured', (req, res, next) => {
+  Article.findAll({
+    where: {
+      rank: {
+        [Op.not]: null,
+        [Op.between]: [1, 3]
+      }
+    },
+    order: [
+      ['category_id', 'asc'],
+      ['rank', 'asc']
+    ],
+    attributes: commonAttributes
+  }).then(articles => {
+    res.json(articles);
+  }).catch(err => {
+    throw err;
+  });
 });
 
 module.exports = router;
