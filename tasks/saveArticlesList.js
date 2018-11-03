@@ -1,8 +1,12 @@
+const argv = require('yargs').argv;
 const _ = require('underscore');
 const Scraper = require('../scrapers');
 const Article = require('../models').Article;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+
+// instantiate a new scraper instance for global use
+const scraper = new Scraper();
 
 const nullifyArticles = async (combinedAids, categoryID) => {
   await Article.findAll({
@@ -17,32 +21,50 @@ const nullifyArticles = async (combinedAids, categoryID) => {
     }
   })
     .then(articlesToUpdate => {
-      articlesToUpdate.forEach(article => {
-        article.update({ rank: null });
-      });
+      // articlesToUpdate.forEach(article => {
+      //   article.update({ rank: null });
+      // });
+      for (let i = 0; i < articlesToUpdate.length; i++) {
+        articlesToUpdate[i].update({ rank: null });
+      }
     })
     .catch(err => { throw err; });
 };
 
 const updateOrCreateArticle = async (targetArticle) => {
-  Article.findOne({ where: {
+  let savedArticle = await Article.findOne({ where: {
     aid: targetArticle.aid
-  } })
-    .then(savedArticle => {
-      if (savedArticle) {
-        savedArticle.update({ rank: targetArticle.rank });
-      } else {
-        Article.create(targetArticle);
-      }
-    })
-    .catch(err => {
-      console.log('err.message', err.message);
-      throw err;
-    });
+  } });
+
+  if (savedArticle) {
+    if (savedArticle.get('rank') !== Number(targetArticle.rank)) {
+      savedArticle.update({ rank: targetArticle.rank });
+    }
+  } else {
+    // no article found
+    Article.create(targetArticle);
+  }
+};
+
+const returnURLs = async (categoryID) => {
+  let urls;
+
+  await Article.findAll({
+    where: {
+      category_id: categoryID,
+      rank: {
+        [Op.not]: null
+      },
+      publisher: null
+    }
+  }).then(articles => {
+    urls = _.pluck(articles, 'source_url');
+  }).catch(err => { throw err; });
+
+  return urls;
 };
 
 const updateArticles = async (articlesList, categoryID) => {
-  // console.log('listttttt', articlesList);
   /*
   combined aids는 현재 인기 기사 30개 각 aid의 array로써
   현재 인기 기사와 데이터베이스에 있지만 더이상 인기없는 기사를
@@ -71,24 +93,14 @@ const updateArticles = async (articlesList, categoryID) => {
 
   // 이번 작업에서 update된 articles를
   // 다음 작업 (기사 내용 fetch)을 위해 리턴합니다.
-  let articleURLs = await Article.findAll({
-    where: {
-      rank: {
-        [Op.not]: null
-      },
-      publisher: null,
-      category_id: categoryID
-    }
-  }).then(articles => {
-    return _.pluck(articles, 'source_url');
-  }).catch(err => { throw err; });
+  let articleURLs = await returnURLs(categoryID);
 
   return articleURLs;
 };
 
 const fetchArticleContent = async (urls) => {
   for (let i = 0; i < urls.length; i++) {
-    await Scraper.getArticleContent(urls[i])
+    await scraper.getArticleContent(urls[i])
       .then(articleContent => {
         Article.findOne({
           where: { aid: articleContent.aid }
@@ -106,40 +118,42 @@ const fetchArticleContent = async (urls) => {
   }
 };
 
-const saveArticlesList = async (categoryID) => {
-  // 기사 목록을 가져온다
-  let articles = await Scraper.getArticleList(categoryID);
-  //
-  let articlesURLsToFetch = await updateArticles(articles, categoryID);
-  //
-  return fetchArticleContent(articlesURLsToFetch);
+const saveArticlesList = (categoryID) => {
+  return new Promise(async (resolve, reject) => {
+    // 기사 목록을 가져온다
+    let articles = await scraper.getArticleList(categoryID);
+    let articleURLsToFetch = await updateArticles(articles, categoryID);
+
+    resolve(articleURLsToFetch);
+  });
 };
 
-const run = async () => {
-  // saveArticlesList(1); // 정치
-  // saveArticlesList(2); // 경제
-  // saveArticlesList(3); // 사회
-  // saveArticlesList(4); // 생활
-  // saveArticlesList(5); // 세계
-
-  for (let i = 1; i < 6; i++) {
-    await saveArticlesList(i);
-  }
-
-  // test
-  let results = await Article.findAndCountAll({
+const test = async (categoryID) => {
+  let articles = await Article.findAndCountAll({
     where: {
-      category_id: {
-        [Op.between]: [1, 5]
-      },
+      category_id: categoryID,
       rank: {
+        [Op.not]: null
+      },
+      publisher: {
         [Op.not]: null
       }
     }
   }).catch(err => { throw err; });
+
   console.log('===================================');
-  console.log('COUNT:', results.count);
+  console.log('COUNT:', articles.count);
   console.log('===================================');
 };
 
-run();
+const run = async (categoryID) => {
+  let urls = await saveArticlesList(categoryID);
+  await fetchArticleContent(urls);
+
+  // test
+  await test(categoryID);
+  // terminate the task
+  process.exit(0);
+};
+
+run(argv.c);
