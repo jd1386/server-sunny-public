@@ -34,6 +34,8 @@ router.get('/', async (req, res, next) => {
 
         // Todo
         // send the mp3 file to S3
+        // remove the mp3 file
+        // update the article's file_url to S3 path
       });
     } else {
       // 기사 내용이 없는 경우
