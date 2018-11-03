@@ -1,8 +1,11 @@
 const axios = require('axios');
+const request = require('request');
 const cheerio = require('cheerio');
+const iconv = require('iconv-lite');
 const queryString = require('query-string');
 const Category = require('../models').Category;
-const mobileContent = require('./mobileContent');
+// const mobileContent = require('./mobileContent');
+// const webContent = require('./webContent');
 
 class Scraper {
   constructor () {
@@ -61,19 +64,78 @@ class Scraper {
     if (url.includes('//m.news.naver.com')) {
     // use mobile version scraper
       try {
-        let articleContent = await mobileContent(url);
-        return articleContent;
+        return await this.getMobileContent(url);
       } catch (err) {
-        console.log(err);
+        throw err;
       }
     } else if (url.includes('//news.naver.com')) {
       // use web version scraper
-      // let articleObj = await webContent(url);
-      console.log('hi i am web version content scraper');
+      try {
+        return await this.getWebContent(url);
+      } catch (err) {
+        throw err;
+      }
     } else if (url.includes('//entertain.naver.com')) {
       // use entertainment version scraper
       console.log('hi i am ent version content scraper');
     }
+  }
+  async getMobileContent (url) {
+    return new Promise(async (resolve, reject) => {
+      var res = await axios.get(url);
+      var html = res.data;
+      const $ = cheerio.load(html);
+
+      // remove unnessary parts from DOM
+      $('span.end_photo_org').remove();
+      $('#dic_area > a').remove();
+
+      let result = {
+        title: $('h2.media_end_head_headline').text(),
+        // content: $('#dic_area').text().trim().replace(/\[.*\] /gm, '').replace(/(\r\n|\n|\r|\t)/gm, "").replace(/\s+/g, " "),
+        content: $('#dic_area').text().trim(),
+        publisher: $('img.media_end_head_top_logo_img').attr('alt'),
+        url: url,
+        sid1: this.naverURLParser(url).sid1,
+        oid: this.naverURLParser(url).oid,
+        aid: this.naverURLParser(url).aid
+      };
+
+      if (result) {
+        resolve(result);
+      } else {
+        reject('error');
+      }
+    });
+  }
+  async getWebContent (url) {
+    return new Promise((resolve, reject) => {
+      request(url, { encoding: null }, (err, res, body) => {
+        const strContents = new Buffer(body);
+        const html = iconv.decode(strContents, 'EUC-KR').toString();
+        const $ = cheerio.load(html);
+
+        // remove unnessary parts from DOM
+        $('span.end_photo_org').remove();
+        // $('#dic_area > a').remove()
+
+        let article = {
+          title: $('h3#articleTitle').text(),
+          content: $('#articleBodyContents').text().trim(),
+          publisher: $('.press_logo').find('img').attr('alt'),
+          url: url,
+          sid: this.naverURLParser(url).sid1,
+          oid: this.naverURLParser(url).oid,
+          aid: this.naverURLParser(url).aid
+        };
+
+        if (article) {
+          resolve(article);
+        } else {
+          reject('web content errror');
+        }
+      });
+    });
   }
   naverURLParser (url) {
     const parsed = queryString.parseUrl(url);

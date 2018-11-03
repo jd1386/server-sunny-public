@@ -7,42 +7,22 @@ const commonAttributes = ['id', 'title', 'image_url', 'rank', 'publisher', 'crea
 
 /* GET articles listing. */
 router.get('/', (req, res, next) => {
-  let category = req.query.category_id;
-
-  if (category) {
-    Article.findAll({
-      where: {
-        category_id: category,
-        rank: {
-          [Op.not]: null
-        }
-      },
-      order: [
-        ['rank', 'asc']
-      ],
-      attributes: commonAttributes
-    }).then(articles => {
-      res.json(articles);
-    }).catch(err => {
-      throw err;
-    });
-  } else {
-    Article.findAll({
-      where: {
-        rank: {
-          [Op.not]: null
-        }
-      },
-      order: [
-        ['rank', 'asc']
-      ],
-      attributes: commonAttributes
-    }).then(articles => {
-      res.json(articles);
-    }).catch(err => {
-      throw err;
-    });
-  }
+  Article.findAll({
+    where: {
+      category_id: req.query.category_id,
+      rank: {
+        [Op.not]: null
+      }
+    },
+    order: [
+      ['rank', 'asc']
+    ],
+    attributes: commonAttributes
+  }).then(articles => {
+    res.json(articles);
+  }).catch(err => {
+    throw err;
+  });
 });
 
 router.get('/featured', (req, res, next) => {
