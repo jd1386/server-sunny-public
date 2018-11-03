@@ -1,3 +1,4 @@
+const argv = require('yargs').argv;
 const _ = require('underscore');
 const Scraper = require('../scrapers');
 const Article = require('../models').Article;
@@ -151,4 +152,4 @@ const run = async (categoryID) => {
   process.exit(0);
 };
 
-run(3);
+run(argv.c);
