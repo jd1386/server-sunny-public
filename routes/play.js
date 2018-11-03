@@ -9,8 +9,10 @@ const Scraper = require('../scrapers');
 /* GET articles listing. */
 router.get('/', async (req, res, next) => {
   try {
+    let scraper = new Scraper();
+
     let articleExisting = await Article.findByPk(req.query.article_id);
-    let articleFetched = await Scraper.getArticleContent(articleExisting.get('source_url'));
+    let articleFetched = await scraper.getArticleContent(articleExisting.get('source_url'));
 
     if (articleFetched.content) {
       // console.log('ARTICLE CONTENT', articleFetched.content);
