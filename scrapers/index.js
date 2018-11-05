@@ -62,22 +62,23 @@ class Scraper {
   }
   async getArticleContent (url) {
     if (url.includes('//m.news.naver.com')) {
-    // use mobile version scraper
-      try {
-        return await this.getMobileContent(url);
-      } catch (err) {
-        throw err;
+      // use mobile version scraper
+      console.log('running a mobile scraper');
+      if (url.includes('sid1=106')) {
+        return this.getMobileEntContent(url);
       }
+      return this.getMobileContent(url);
     } else if (url.includes('//news.naver.com')) {
       // use web version scraper
-      try {
-        return await this.getWebContent(url);
-      } catch (err) {
-        throw err;
-      }
+      console.log('running a web scraper');
+      return this.getWebContent(url);
+    } else if (url.includes('//m.entertain.naver.com')) {
+      console.log('running a mobile ent scraper');
+      return this.getMobileEntContent(url);
     } else if (url.includes('//entertain.naver.com')) {
       // use entertainment version scraper
-      console.log('hi i am ent version content scraper');
+      console.log('running an ent scraper');
+      return this.getEntContent(url);
     }
   }
   async getMobileContent (url) {
@@ -93,7 +94,7 @@ class Scraper {
       let result = {
         title: $('h2.media_end_head_headline').text(),
         // content: $('#dic_area').text().trim().replace(/\[.*\] /gm, '').replace(/(\r\n|\n|\r|\t)/gm, "").replace(/\s+/g, " "),
-        content: $('#dic_area').text().trim(),
+        content: $('#dic_area').text().trim() || $('#contentArea').text().trim(),
         publisher: $('img.media_end_head_top_logo_img').attr('alt'),
         url: url,
         sid1: this.naverURLParser(url).sid1,
@@ -102,16 +103,19 @@ class Scraper {
       };
 
       if (result) {
+        console.log(result);
         resolve(result);
       } else {
-        reject('error');
+        reject(new Error('failed to getMobileContent'));
       }
     });
   }
   async getWebContent (url) {
     return new Promise((resolve, reject) => {
       request(url, { encoding: null }, (err, res, body) => {
-        const strContents = new Buffer(body);
+        if (err) { throw err; }
+
+        const strContents = Buffer.from(body);
         const html = iconv.decode(strContents, 'EUC-KR').toString();
         const $ = cheerio.load(html);
 
@@ -132,7 +136,67 @@ class Scraper {
         if (article) {
           resolve(article);
         } else {
-          reject('web content errror');
+          reject(new Error('failed to getWebContent'));
+        }
+      });
+    });
+  }
+  async getMobileEntContent (url) {
+    return new Promise((resolve, reject) => {
+      request(url, (err, res, body) => {
+        if (err) { throw err; };
+
+        const strContents = Buffer.from(body);
+        const html = iconv.decode(strContents, 'utf-8').toString();
+        const $ = cheerio.load(html);
+
+        // remove unnessary parts from DOM
+        $('span.end_photo_org').remove();
+
+        let article = {
+          title: $('h2.media_end_head_headline').text().trim(),
+          content: $('#contentArea').text().trim(),
+          publisher: $('.press_logo').find('img').attr('alt'),
+          url: url,
+          sid1: this.naverURLParser(url).sid1,
+          oid: this.naverURLParser(url).oid,
+          aid: this.naverURLParser(url).aid
+        };
+
+        if (article) {
+          resolve(article);
+        } else {
+          reject(new Error('failed to getEntContent'));
+        }
+      });
+    });
+  }
+  async getEntContent (url) {
+    return new Promise((resolve, reject) => {
+      request(url, (err, res, body) => {
+        if (err) { throw err; };
+
+        const strContents = Buffer.from(body);
+        const html = iconv.decode(strContents, 'utf-8').toString();
+        const $ = cheerio.load(html);
+
+        // remove unnessary parts from DOM
+        $('span.end_photo_org').remove();
+
+        let article = {
+          title: $('h2.end_tit').text().trim(),
+          content: $('#articeBody').text().trim(),
+          publisher: $('.press_logo').find('img').attr('alt'),
+          url: url,
+          sid1: this.naverURLParser(url).sid1,
+          oid: this.naverURLParser(url).oid,
+          aid: this.naverURLParser(url).aid
+        };
+
+        if (article) {
+          resolve(article);
+        } else {
+          reject(new Error('failed to getEntContent'));
         }
       });
     });
