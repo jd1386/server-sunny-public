@@ -3,7 +3,7 @@ const router = express.Router();
 var Article = require('../models').Article;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
-const commonAttributes = ['id', 'aid', 'title', 'image_url', 'rank', 'publisher', 'createdAt'];
+const commonAttributes = ['id', 'aid', 'title', 'source_url', 'image_url', 'rank', 'publisher', 'createdAt'];
 
 /* GET articles listing. */
 router.get('/', (req, res, next) => {
