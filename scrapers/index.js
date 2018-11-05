@@ -156,7 +156,7 @@ class Scraper {
         let article = {
           title: $('h2.media_end_head_headline').text().trim(),
           content: $('#contentArea').text().trim(),
-          publisher: $('.press_logo').find('img').attr('alt'),
+          publisher: $('img.media_end_linked_title_img').attr('alt'),
           url: url,
           sid1: this.naverURLParser(url).sid1,
           oid: this.naverURLParser(url).oid,
