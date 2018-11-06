@@ -8,8 +8,8 @@ var app = require('../app');
 var debug = require('debug')('server-sunny:server');
 var http = require('http');
 // cron jobs
-// const cron = require('node-cron');
-// const shell = require('shelljs');
+const cron = require('node-cron');
+const shell = require('shelljs');
 //
 
 /**
@@ -30,16 +30,93 @@ var server = http.createServer(app);
 */
 // Todo: add dynamic category id
 
-// cron.schedule('* * * * *', () => {
-//   console.log('running a cron task');
-//   if (shell.exec(`NODE_ENV=${app.settings.env} node tasks/saveArticlesList.js --c=1`).code === 0) {
-//     // error occurred
-//     shell.exit(1);
-//     shell.echo('error occurred when running cron task');
-//   } else {
-//     shell.echo('cron task successfully run');
-//   }
-// });
+cron.schedule('1 * * * *', () => {
+  console.log('running a cron task: category #1: ');
+  if (shell.exec(`NODE_ENV=${app.settings.env} node tasks/saveArticlesList.js --c=1`).code === 0) {
+    // error occurred
+    shell.exit(1);
+    shell.echo('error occurred when running cron task');
+  } else {
+    shell.echo('cron task successfully run');
+  }
+});
+
+cron.schedule('2 * * * *', () => {
+  console.log('running a cron task: category #2');
+  if (shell.exec(`NODE_ENV=${app.settings.env} node tasks/saveArticlesList.js --c=2`).code === 0) {
+    // error occurred
+    shell.exit(1);
+    shell.echo('error occurred when running cron task');
+  } else {
+    shell.echo('cron task successfully run');
+  }
+});
+
+cron.schedule('3 * * * *', () => {
+  console.log('running a cron task: category #3');
+  if (shell.exec(`NODE_ENV=${app.settings.env} node tasks/saveArticlesList.js --c=3`).code === 0) {
+    // error occurred
+    shell.exit(1);
+    shell.echo('error occurred when running cron task');
+  } else {
+    shell.echo('cron task successfully run');
+  }
+});
+
+cron.schedule('4 * * * *', () => {
+  console.log('running a cron task: category #4');
+  if (shell.exec(`NODE_ENV=${app.settings.env} node tasks/saveArticlesList.js --c=4`).code === 0) {
+    // error occurred
+    shell.exit(1);
+    shell.echo('error occurred when running cron task');
+  } else {
+    shell.echo('cron task successfully run');
+  }
+});
+
+cron.schedule('5 * * * *', () => {
+  console.log('running a cron task: category #5');
+  if (shell.exec(`NODE_ENV=${app.settings.env} node tasks/saveArticlesList.js --c=5`).code === 0) {
+    // error occurred
+    shell.exit(1);
+    shell.echo('error occurred when running cron task');
+  } else {
+    shell.echo('cron task successfully run');
+  }
+});
+
+cron.schedule('6 * * * *', () => {
+  console.log('running a cron task: category #6');
+  if (shell.exec(`NODE_ENV=${app.settings.env} node tasks/saveArticlesList.js --c=6`).code === 0) {
+    // error occurred
+    shell.exit(1);
+    shell.echo('error occurred when running cron task');
+  } else {
+    shell.echo('cron task successfully run');
+  }
+});
+
+cron.schedule('7 * * * *', () => {
+  console.log('running a cron task: category #7');
+  if (shell.exec(`NODE_ENV=${app.settings.env} node tasks/saveArticlesList.js --c=7`).code === 0) {
+    // error occurred
+    shell.exit(1);
+    shell.echo('error occurred when running cron task');
+  } else {
+    shell.echo('cron task successfully run');
+  }
+});
+
+cron.schedule('8 * * * *', () => {
+  console.log('running a cron task: category #8');
+  if (shell.exec(`NODE_ENV=${app.settings.env} node tasks/saveArticlesList.js --c=8`).code === 0) {
+    // error occurred
+    shell.exit(1);
+    shell.echo('error occurred when running cron task');
+  } else {
+    shell.echo('cron task successfully run');
+  }
+});
 
 /**
  * Listen on provided port, on all network interfaces.
