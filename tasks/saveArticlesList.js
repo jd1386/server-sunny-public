@@ -94,7 +94,6 @@ const updateArticles = async (articlesList, categoryID) => {
 };
 
 const fetchArticleContent = async (urls) => {
-  console.log('urlsssssssss count', urls.length);
   for (let i = 0; i < urls.length; i++) {
     await scraper.getArticleContent(urls[i])
       .then(articleContent => {
@@ -106,6 +105,8 @@ const fetchArticleContent = async (urls) => {
               savedArticle.update({
                 publisher: articleContent.publisher
               });
+              // https://github.com/petkaantonov/bluebird/blob/master/docs/docs/warning-explanations.md#warning-a-promise-was-created-in-a-handler-but-was-not-returned-from-it
+              return null;
             }
           })
           .catch(err => { throw err; });
