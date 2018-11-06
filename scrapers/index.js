@@ -103,7 +103,6 @@ class Scraper {
       };
 
       if (result) {
-        console.log(result);
         resolve(result);
       } else {
         reject(new Error('failed to getMobileContent'));
