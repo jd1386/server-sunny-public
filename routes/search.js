@@ -19,12 +19,22 @@ router.get('/news', function (req, res) {
       'X-Naver-Client-Secret': clientSecret
     }
   };
+
   request(options, (error, response, body) => {
     if (!error && response.statusCode === 200) {
-      console.log(
-        'http://127.0.0.1:3000/search/news?query=검색어 router listening on port 3000!'
-      );
-      res.set({ 'content-type': 'application/json; charset=utf-8' }); // should set utf-8 in request!!
+      var naverNews = JSON.parse(body).items.filter(item => {
+        if (item.link.split('/')[2] === 'news.naver.com') {
+          return item;
+        }
+      });
+      // console.log('33333#####', naverNews);
+
+      var titleLink = naverNews.map(item => {
+        return { title: item.title, link: item.link };
+      });
+
+      console.log('$$$$$$$$$$$$', titleLink);
+      res.set({ 'content-type': 'application/json; charset=utf-8' }); // should set utf-8 in request as well!!
       res.end(body);
     } else {
       res.status(response.statusCode).end();
@@ -32,10 +42,5 @@ router.get('/news', function (req, res) {
     }
   });
 });
-module.exports = router;
 
-// router.listen(3000, function() {
-//   console.log(
-//     "http://127.0.0.1:3000/search/news?query=검색어 newsapi listening on port 3000!"
-//   );
-// });
+module.exports = router;
