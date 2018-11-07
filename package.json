@@ -26,6 +26,7 @@
     "node-cron": "^2.0.3",
     "query-string": "^6.2.0",
     "request": "^2.88.0",
+    "sanitize-html": "^1.19.1",
     "sequelize": "^4.41.0",
     "sequelize-cli": "^5.2.0",
     "shelljs": "^0.8.2",
