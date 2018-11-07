@@ -62,3 +62,5 @@ typings/
 
 # temp file folder
 tmp
+
+.DS_Store

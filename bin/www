@@ -37,7 +37,7 @@ cron.schedule('1 * * * *', () => {
     shell.exit(1);
     shell.echo('error occurred when running cron task');
   } else {
-    shell.echo('cron task successfully run');
+    shell.echo('cron task successfully run: category #1');
   }
 });
 
@@ -48,7 +48,7 @@ cron.schedule('2 * * * *', () => {
     shell.exit(1);
     shell.echo('error occurred when running cron task');
   } else {
-    shell.echo('cron task successfully run');
+    shell.echo('cron task successfully run: category #2');
   }
 });
 
@@ -59,7 +59,7 @@ cron.schedule('3 * * * *', () => {
     shell.exit(1);
     shell.echo('error occurred when running cron task');
   } else {
-    shell.echo('cron task successfully run');
+    shell.echo('cron task successfully run: category #3');
   }
 });
 
@@ -70,7 +70,7 @@ cron.schedule('4 * * * *', () => {
     shell.exit(1);
     shell.echo('error occurred when running cron task');
   } else {
-    shell.echo('cron task successfully run');
+    shell.echo('cron task successfully run: category #4');
   }
 });
 
@@ -81,7 +81,7 @@ cron.schedule('5 * * * *', () => {
     shell.exit(1);
     shell.echo('error occurred when running cron task');
   } else {
-    shell.echo('cron task successfully run');
+    shell.echo('cron task successfully run: category #5');
   }
 });
 
@@ -92,7 +92,7 @@ cron.schedule('6 * * * *', () => {
     shell.exit(1);
     shell.echo('error occurred when running cron task');
   } else {
-    shell.echo('cron task successfully run');
+    shell.echo('cron task successfully run: category #6');
   }
 });
 
@@ -103,7 +103,7 @@ cron.schedule('7 * * * *', () => {
     shell.exit(1);
     shell.echo('error occurred when running cron task');
   } else {
-    shell.echo('cron task successfully run');
+    shell.echo('cron task successfully run: category #7');
   }
 });
 
@@ -114,7 +114,7 @@ cron.schedule('8 * * * *', () => {
     shell.exit(1);
     shell.echo('error occurred when running cron task');
   } else {
-    shell.echo('cron task successfully run');
+    shell.echo('cron task successfully run: category #8');
   }
 });
 
