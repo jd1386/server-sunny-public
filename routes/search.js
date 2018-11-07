@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const request = require('request');
+
 require('dotenv').config();
 var clientId = process.env.NAVER_CLIENT_ID;
 var clientSecret = process.env.NAVER_CLIENT_SECRET;
 
 router.get('/news', function (req, res) {
+  console.log(11111111);
   var apiUrl =
     'https://openapi.naver.com/v1/search/news?query=' +
     encodeURI(req.query.query);
@@ -27,15 +29,14 @@ router.get('/news', function (req, res) {
           return item;
         }
       });
-      // console.log('33333#####', naverNews);
+      console.log('33333#####', naverNews);
 
       var titleLink = naverNews.map(item => {
         return { title: item.title, link: item.link };
       });
-
       console.log('$$$$$$$$$$$$', titleLink);
       res.set({ 'content-type': 'application/json; charset=utf-8' }); // should set utf-8 in request as well!!
-      res.end(body);
+      res.send(titleLink);
     } else {
       res.status(response.statusCode).end();
       console.log('error = ' + response.statusCode);
