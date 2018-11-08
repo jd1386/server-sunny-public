@@ -9,9 +9,9 @@ readdir(path.join(__dirname, '..', 'tmp'))
   .then(async (files) => {
     for (let i = 0; i < files.length; i++) {
       let savedFile = await Uploader.upload(files[i]);
-      console.log(savedFile.Key);
       let fileURL = savedFile.Location;
       let fileName = savedFile.Key;
+
       console.log('savedFile', fileName, fileURL);
     };
   })
