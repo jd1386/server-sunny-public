@@ -5,6 +5,8 @@ const mime = require('mime-types');
 const readFile = util.promisify(fs.readFile);
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 const AWS = require('aws-sdk');
+const Article = require('../models').Article;
+require('colors');
 
 AWS.config.update({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -22,7 +24,7 @@ const upload = async (file) => {
         var S3 = new AWS.S3();
 
         S3.upload({
-          Bucket: process.env.AWS_S3_BUCKET_NAME_DEV,
+          Bucket: process.env.AWS_S3_BUCKET_NAME,
           Key: file,
           Body: base64Data,
           Prefix: 'mp3',
@@ -31,7 +33,7 @@ const upload = async (file) => {
           ContentType: mime.lookup(file)
         }, function (err, data) {
           if (err) { reject(err); }
-          console.log('uploaded to s3', data);
+          console.log('Successfully uploaded to S3'.green);
           resolve(data);
         });
       })
@@ -41,7 +43,7 @@ const upload = async (file) => {
 
 const find = (file) => {
   var getParams = {
-    Bucket: process.env.AWS_S3_BUCKET_NAME_DEV,
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
     Key: 'search.mp3'
   };
 
@@ -64,7 +66,29 @@ const find = (file) => {
   });
 };
 
+const updateAndUploadMp3 = async (aid) => {
+  await Article.findOne({ where: {
+    aid: aid
+  } })
+    .then(async (savedArticle) => {
+      if (savedArticle) {
+        if (!savedArticle.get('file_url')) {
+          await savedArticle.update({
+            file_url: `https://sunny-files-dev.s3.ap-northeast-2.amazonaws.com/${savedArticle.get('aid')}.mp3`
+          });
+          await upload(`${savedArticle.get('aid')}.mp3`);
+          return null;
+        }
+      } else {
+        // has no article in the db
+        console.log('no article saved in the db');
+      }
+    })
+    .catch(err => { throw err; });
+};
+
 module.exports = {
   upload,
-  find
+  find,
+  updateAndUploadMp3
 };
