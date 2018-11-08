@@ -74,7 +74,7 @@ const updateAndUploadMp3 = async (aid) => {
       if (savedArticle) {
         if (!savedArticle.get('file_url')) {
           await savedArticle.update({
-            file_url: `https://sunny-files-dev.s3.ap-northeast-2.amazonaws.com/${savedArticle.get('aid')}.mp3`
+            file_url: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.ap-northeast-2.amazonaws.com/${savedArticle.get('aid')}.mp3`
           });
           await upload(`${savedArticle.get('aid')}.mp3`);
           return null;
