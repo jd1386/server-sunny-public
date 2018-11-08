@@ -24,6 +24,8 @@
     "morgan": "~1.9.0",
     "mysql2": "^1.6.1",
     "node-cron": "^2.0.3",
+    "passport": "^0.4.0",
+    "passport-kakao": "0.0.5",
     "query-string": "^6.2.0",
     "request": "^2.88.0",
     "sanitize-html": "^1.19.1",
