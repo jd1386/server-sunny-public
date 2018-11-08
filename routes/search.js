@@ -28,7 +28,7 @@ router.get('/news', function (req, res) {
 
       JSON.parse(body).items
         .filter(item => {
-          return item.link.includes('news.naver.com');
+          return item.link.includes('https://news.naver.com/');
         })
         .forEach(item => {
           let articleObj = {};
