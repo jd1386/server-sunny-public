@@ -4,8 +4,7 @@ const cheerio = require('cheerio');
 const iconv = require('iconv-lite');
 const queryString = require('query-string');
 const Category = require('../models').Category;
-// const mobileContent = require('./mobileContent');
-// const webContent = require('./webContent');
+require('colors');
 
 class Scraper {
   constructor () {
@@ -21,6 +20,14 @@ class Scraper {
       'technology': 'https://m.news.naver.com/rankingList.nhn?sid1=105',
       'sports': 'https://m.news.naver.com/rankingList.nhn?sid1=107',
       'entertainment': 'https://m.news.naver.com/rankingList.nhn?sid1=106'
+    };
+  }
+  naverURLParser (url) {
+    const parsed = queryString.parseUrl(url);
+    return {
+      sid1: parsed.query.sid1,
+      oid: parsed.query.oid,
+      aid: parsed.query.aid
     };
   }
   async getArticleList (categoryID) {
@@ -199,14 +206,6 @@ class Scraper {
         }
       });
     });
-  }
-  naverURLParser (url) {
-    const parsed = queryString.parseUrl(url);
-    return {
-      sid1: parsed.query.sid1,
-      oid: parsed.query.oid,
-      aid: parsed.query.aid
-    };
   }
 }
 

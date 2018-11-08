@@ -1,19 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const request = require('request');
+const sanitizeHtml = require('sanitize-html');
+const _ = require('underscore');
 
 require('dotenv').config();
 var clientId = process.env.NAVER_CLIENT_ID;
 var clientSecret = process.env.NAVER_CLIENT_SECRET;
 
-router.get('/news', function (req, res) {
-  console.log(11111111);
-  var apiUrl =
-    'https://openapi.naver.com/v1/search/news?query=' +
-    encodeURI(req.query.query);
-  var options = {
+const naverConfig = (query) => {
+  return {
     method: 'GET',
-    url: apiUrl,
+    url: 'https://openapi.naver.com/v1/search/news?display=25&query=' + encodeURI(query),
     headers: {
       'Content-Type': 'text/json; charset=utf-8',
       'cache-control': 'no-cache',
@@ -21,22 +19,29 @@ router.get('/news', function (req, res) {
       'X-Naver-Client-Secret': clientSecret
     }
   };
+};
 
-  request(options, (error, response, body) => {
+router.get('/news', function (req, res) {
+  request(naverConfig(req.query.query), (error, response, body) => {
     if (!error && response.statusCode === 200) {
-      var naverNews = JSON.parse(body).items.filter(item => {
-        if (item.link.split('/')[2] === 'news.naver.com') {
-          return item;
-        }
-      });
-      console.log('33333#####', naverNews);
+      let articles = [];
 
-      var titleLink = naverNews.map(item => {
-        return { title: item.title, link: item.link };
-      });
-      console.log('$$$$$$$$$$$$', titleLink);
-      res.set({ 'content-type': 'application/json; charset=utf-8' }); // should set utf-8 in request as well!!
-      res.send(titleLink);
+      JSON.parse(body).items
+        .filter(item => {
+          return item.link.includes('news.naver.com');
+        })
+        .forEach(item => {
+          let articleObj = {};
+          // sanitize <b> tag in the title
+          articleObj.title = sanitizeHtml(item.title, {
+            allowedTags: []
+          });
+          articleObj.source_url = item.link;
+          articleObj.createdAt = item.pubDate;
+          articles.push(articleObj);
+        });
+
+      res.send(articles);
     } else {
       res.status(response.statusCode).end();
       console.log('error = ' + response.statusCode);
