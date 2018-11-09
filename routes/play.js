@@ -62,7 +62,7 @@ router.get('/', async (req, res, next) => {
 
         const options = {
           url: 'https://naveropenapi.apigw.ntruss.com/voice/v1/tts',
-          form: { speaker: 'mijin', speed: '-1', text: articleFetched.title },
+          form: { speaker: 'mijin', speed: '-1', text: articleFetched.content },
           headers: { 'X-NCP-APIGW-API-KEY-ID': process.env.NAVER_CLOVA_ID, 'X-NCP-APIGW-API-KEY': process.env.NAVER_CLOVA_SECRET }
         };
         // create tmp folder if not present
