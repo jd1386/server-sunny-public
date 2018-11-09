@@ -54,7 +54,7 @@ router.get('/', async (req, res, next) => {
         res.redirect(articleExisting.get('file_url'));
       } else {
         // if not, call Naver Clova API
-        console.log('NO file_url'.red);
+        console.log('NO file_url '.red);
 
         let articleFetched = await scraper.getArticleContent(url);
 
