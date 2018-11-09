@@ -3,10 +3,7 @@ const router = express.Router();
 const request = require('request');
 const sanitizeHtml = require('sanitize-html');
 const _ = require('underscore');
-
 require('dotenv').config();
-var clientId = process.env.NAVER_CLIENT_ID;
-var clientSecret = process.env.NAVER_CLIENT_SECRET;
 
 const naverConfig = (query) => {
   return {
@@ -15,8 +12,8 @@ const naverConfig = (query) => {
     headers: {
       'Content-Type': 'text/json; charset=utf-8',
       'cache-control': 'no-cache',
-      'X-Naver-Client-Id': clientId,
-      'X-Naver-Client-Secret': clientSecret
+      'X-Naver-Client-Id': process.env.NAVER_CLIENT_ID,
+      'X-Naver-Client-Secret': process.env.NAVER_CLIENT_SECRET
     }
   };
 };
