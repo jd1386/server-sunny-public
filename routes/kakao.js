@@ -28,7 +28,7 @@ router.get('/callback',
       issuer: 'SunnyApp'
     });
 
-    res.redirect(`http://localhost:3001?token=${token}`);
+    res.redirect(`http://sunny-app.s3-website.ap-northeast-2.amazonaws.com?token=${token}`);
   }
 );
 
