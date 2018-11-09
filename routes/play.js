@@ -8,13 +8,10 @@ const Uploader = require('../uploader');
 const Article = require('../models').Article;
 require('colors');
 
-/* GET articles listing. */
 router.get('/', async (req, res, next) => {
   let scraper = new Scraper();
   let url = req.originalUrl.split('/play?url=')[1];
   let aid = scraper.naverURLParser(url)['aid'];
-
-  // http://localhost:3000/play?url=https://m.news.naver.com/rankingRead.nhn%3Foid=001&aid=0010453702&sid1=100&date=20181107&ntype=RANKING
 
   try {
     // 1. check if we have an article with the given url
@@ -23,13 +20,12 @@ router.get('/', async (req, res, next) => {
     } });
 
     if (!articleExisting) {
-      console.log('no article found with given aid'.red);
+      console.log('no article found with the given aid'.red);
       // the article comes from Naver search results
       // go fetch the article, play it, and do not
       // upload the file to S3
 
       let articleFetched = await scraper.getArticleContent(url);
-
       console.log('articleFetched..', articleFetched.title.blue);
 
       const options = {
@@ -55,9 +51,7 @@ router.get('/', async (req, res, next) => {
       } else {
         // if not, call Naver Clova API
         console.log('NO file_url '.red);
-
         let articleFetched = await scraper.getArticleContent(url);
-
         console.log('articleFetched..', articleFetched.title.blue);
 
         const options = {
