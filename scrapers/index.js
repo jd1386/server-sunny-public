@@ -130,11 +130,11 @@ class Scraper {
         // $('#dic_area > a').remove()
 
         let article = {
-          title: $('h3#articleTitle').text(),
+          title: $('h3#articleTitle.tts_head').text(),
           content: $('#articleBodyContents').text().trim(),
           publisher: $('.press_logo').find('img').attr('alt'),
           url: url,
-          sid: this.naverURLParser(url).sid1,
+          sid1: this.naverURLParser(url).sid1,
           oid: this.naverURLParser(url).oid,
           aid: this.naverURLParser(url).aid
         };
