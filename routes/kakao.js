@@ -29,7 +29,11 @@ router.get('/callback',
     });
 
     // redirect user with token param
-    res.redirect(`http://sunny-app.s3-website.ap-northeast-2.amazonaws.com?token=${token}`);
+    if (process.env.NODE_ENV === 'production') {
+      res.redirect(`http://sunny-app.ga?token=${token}`);
+    } else {
+      res.redirect(`http://localhost:3001?token=${token}`);
+    }
   }
 );
 
